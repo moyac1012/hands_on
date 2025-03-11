@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>プログラミング教材ハブ</title>
+  <!-- Bootstrap CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+  />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      /* 行間を広げる */
+      line-height: 1.8;
+      font-family: sans-serif;
+    }
+    header {
+      background-color: #0d6efd;
+      color: #fff;
+      padding: 1rem;
+    }
+    .hero {
+      /* 好みの背景画像に変更可能 */
+      background: url('https://images.unsplash.com/photo-1517430816045-df4b7de2e71b?auto=format&fit=crop&w=1920&q=80') no-repeat center center;
+      background-size: cover;
+      color: #fff;
+      padding: 100px 0;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.2rem;
+    }
+    .btn-hero {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      padding: 0.75rem 1.5rem;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem 0;
+      background: #f8f9fa;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- ヘッダー -->
+  <header>
+    <div class="container">
+      <h2>プログラミング教材ハブ</h2>
+    </div>
+  </header>
+
+  <!-- ヒーローセクション -->
+  <section class="hero">
+    <div class="container">
+      <h1>学びたい教材を選ぼう</h1>
+      <p>
+        このサイトでは、さまざまなプログラミング教材を提供しています。<br/>
+        好きなチュートリアルを選んでスキルアップしましょう！
+      </p>
+      <!-- 必要に応じてメインボタンを設置（例：共通紹介ページなど） -->
+      <a href="#tutorial-list" class="btn btn-light btn-hero">教材一覧を見る</a>
+    </div>
+  </section>
+
+  <!-- 教材一覧 -->
+  <section id="tutorial-list" class="container my-5">
+    <h3 class="mb-4">教材一覧</h3>
+    <div class="row">
+      <!-- TODOリスト教材カード -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+          <img
+            src="https://placehold.jp/300x150.png?text=TODO%20List"
+            class="card-img-top"
+            alt="TODOリスト教材"
+          />
+          <div class="card-body">
+            <h5 class="card-title">HTML/CSS/JSで作るTODOリスト</h5>
+            <p class="card-text">
+              ステップを追って学習できるシンプルなTODOリストアプリのチュートリアル。<br>
+              ローカルストレージやフィルター機能なども実装します。
+            </p>
+          </div>
+          <div class="card-footer text-end">
+            <a href="tutorial.html" class="btn btn-primary">教材を見る</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 他の教材カード1 -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+          <img
+            src="https://placehold.jp/300x150.png?text=Under%20Construction"
+            class="card-img-top"
+            alt="教材2のイメージ"
+          />
+          <div class="card-body">
+            <h5 class="card-title">Pythonの基礎を学ぶ</h5>
+            <p class="card-text">
+              こちらは現在準備中の教材です。<br>
+              近日公開予定！
+            </p>
+          </div>
+          <div class="card-footer text-end">
+            <!-- 準備中の場合はリンク無効化や、# などで対応 -->
+            <a href="#" class="btn btn-secondary disabled" aria-disabled="true">準備中</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 他の教材カード2 -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+          <img
+            src="https://placehold.jp/300x150.png?text=Tutorial"
+            class="card-img-top"
+            alt="教材3のイメージ"
+          />
+          <div class="card-body">
+            <h5 class="card-title">（例）Unityで作る2Dゲーム</h5>
+            <p class="card-text">
+              Unityを使って簡単な2Dゲームを作りながら、C#のスクリプトの書き方も学びます。
+            </p>
+          </div>
+          <div class="card-footer text-end">
+            <a href="#" class="btn btn-primary">教材を見る</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- フッター -->
+  <footer>
+    <p>© 2025 カラクリTutorials</p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+  >
+    document.addEventListener("DOMContentLoaded", () => {
+      // すべてのコピー用ボタンを取得
+      const copyButtons = document.querySelectorAll('.copy-btn');
+      
+      copyButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // 親要素 .code-block から <code> 要素を検索
+          const codeElement = btn.closest('.code-block')?.querySelector('code');
+          if (!codeElement) return;
+
+          // テキストを取得 (textContent or innerText)
+          const codeText = codeElement.textContent;
+
+          // Clipboard APIでコピー（HTTPS または localhost 必須）
+          navigator.clipboard.writeText(codeText)
+            .then(() => {
+              btn.textContent = 'Copied!';
+              setTimeout(() => {
+                btn.textContent = 'Copy';
+              }, 1500);
+            })
+            .catch(err => {
+              console.error('Copy failed:', err);
+              alert("コピーに失敗しました。お使いのブラウザ設定を確認してください。");
+            });
+        });
+      });
+    });
+    </script>
+</body>
+</html>

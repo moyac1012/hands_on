@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>TODOリスト教材 - Tutorial</title>
+  <!-- Bootstrap CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+  />
+  <style>
+    body {
+      margin-bottom: 3rem;
+      /* 行間を広げる */
+      line-height: 1.8;
+    }
+    h1, h2, h3, h4 {
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      font-weight: bold;
+    }
+    /* コードブロック全体の装飾 */
+    .code-block {
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      position: relative;
+      margin-bottom: 1.5rem; /* コードブロック間に余白 */
+      padding: 1rem;
+    }
+    /* 実際の pre / code の見た目 */
+    pre {
+      margin: 0;
+      padding-right: 3rem; /* ボタンとの重なりを避けるために右余白 */
+      overflow-x: auto;
+    }
+    code {
+      font-family: "Courier New", monospace;
+      white-space: pre; /* 改行をそのまま表示 */
+    }
+    /* Copyボタン */
+    .copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .step-title {
+      margin-top: 2rem;
+      padding: 0.5rem 1rem;
+      background-color: #e7f1ff;
+      border-left: 4px solid #0d6efd;
+      font-weight: bold;
+    }
+    .problem {
+      border: 1px solid #ffc107;
+      background-color: #fffdee;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+    }
+    .problem h5 {
+      color: #d38e00;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">TODOリスト教材</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <h1>HTML/CSS/JavaScript で作る TODOリスト教材</h1>
+    <p>
+      この教材では、最終的にブラウザで動く簡単なTODOリストアプリを完成させます。<br>
+      「コピペでOKな部分」と「自分で手を動かして書いてみる部分（問題）」にメリハリをつけながら進めることで、ミスを減らしつつ理解を深めることができます。
+    </p>
+
+    <hr>
+
+    <h3>目次</h3>
+    <ol>
+      <li><a href="#step0">STEP 0. フォルダ構成を準備</a></li>
+      <li><a href="#step1">STEP 1. 最小限のHTMLを作る</a></li>
+      <li><a href="#step2">STEP 2. CSSをざっくり整える</a></li>
+      <li><a href="#step3">STEP 3. JavaScriptの基本準備</a></li>
+      <li><a href="#step4">STEP 4. 要素を取得し、ボタンを押すとイベント発火</a></li>
+      <li><a href="#step5">STEP 5. 入力値を取得してテーブルに追加</a></li>
+      <li><a href="#step6">STEP 6. 入力チェックを改善</a></li>
+      <li><a href="#step7">STEP 7. データを配列で管理する（表示用関数を作成）</a></li>
+      <li><a href="#step8">STEP 8. localStorage を使ってデータを保存</a></li>
+      <li><a href="#step9">STEP 9. 絞り込み（フィルター）機能を追加</a></li>
+      <li><a href="#step10">STEP 10. さらに工夫してみよう</a></li>
+    </ol>
+
+    <hr>
+
+    <div class="step-title" id="step0">STEP 0. フォルダ構成を準備</div>
+    <p>
+      まずは作業用フォルダを作成し、下記のようにファイルを用意します。
+    </p>
+
+    <div class="code-block">
+      <button class="btn btn-sm btn-secondary copy-btn">Copy</button>
+      <pre><code>my-todo/
+├─ index.html
+├─ style.css
+└─ script.js
+</code></pre>
+    </div>
+
+    <p>
+      これで準備完了です。とくに練習問題はなく、指示通りに進めてOKです。
+    </p>
+
+    <div class="step-title" id="step1">STEP 1. 最小限のHTMLを作る</div>
+    <p>
+      ブラウザに表示するための基本構造を用意します。<br>
+      まずは
+      <code>index.html</code> に以下をコピペしてください。
+    </p>
+    <div class="code-block">
+      <button class="btn btn-sm btn-secondary copy-btn">Copy</button>
+      <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8" /&gt;
+  &lt;title&gt;TODOリスト&lt;/title&gt;
+  &lt;link rel="stylesheet" href="style.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;TODOリスト&lt;/h1&gt;
+
+  &lt;div id="input-area"&gt;
+    &lt;label&gt;TODO:
+      &lt;input id="todo-input" type="text" placeholder="やることを入力" /&gt;
+    &lt;/label&gt;
+    &lt;button id="add-btn"&gt;登録&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;table id="todo-table"&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th&gt;やること&lt;/th&gt;
+        &lt;th&gt;期日&lt;/th&gt;
+        &lt;th&gt;優先度&lt;/th&gt;
+        &lt;th&gt;完了&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;&lt;/tbody&gt;
+  &lt;/table&gt;
+
+  &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+    </div>
+    <p>
+      ブラウザでページを開き、「TODOリスト」というタイトル・見出しが表示されるか確認してください。
+    </p>
+    <div class="problem">
+      <h5>問題</h5>
+      <ul>
+        <li>タイトル（<code>&lt;title&gt;</code>）や <code>&lt;h1&gt;</code> を好きな表現に変えてみましょう。</li>
+        <li><code>&lt;h1&gt;</code> のすぐ下に <code>&lt;p&gt;</code> などで短い説明文を追加してください。</li>
+      </ul>
+    </div>
+
+    <div class="step-title" id="step2">STEP 2. CSS をざっくり整える</div>
+    <p>
+      見た目を少し整えるため、<code>style.css</code> に下記を追加します。
+    </p>
+    <div class="code-block">
+      <button class="btn btn-sm btn-secondary copy-btn">Copy</button>
+      <pre><code>body {
+  font-family: sans-serif;
+  margin: 20px;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+#input-area {
+  margin-bottom: 20px;
+}
+
+#todo-input {
+  margin-left: 5px;
+  width: 200px;
+  padding: 5px;
+}
+
+#add-btn {
+  margin-left: 10px;
+  padding: 5px 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  max-width: 600px; /* お好みで */
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+</code></pre>
+    </div>
+    <div class="problem">
+      <h5>問題</h5>
+      <ul>
+        <li><code>body</code> の背景色を薄い色にしてみましょう。</li>
+        <li><code>th</code>（ヘッダセル）の背景色を変更、または文字色を変更してみましょう。</li>
+      </ul>
+    </div>
+
+    <div class="step-title" id="step3">STEP 3. JavaScriptの基本準備</div>
+    <p>
+      まずは <code>script.js</code> が正しく読み込まれているか確認するために、コンソールへの出力を置いてみましょう。
+    </p>
+    <div class="code-block">
+      <button class="btn btn-sm btn-secondary copy-btn">Copy</button>
+      <pre><code>console.log("スクリプト読み込みテスト：OK");
+</code></pre>
+    </div>
+    <p>
+      ブラウザの開発者ツール（F12）を開き、コンソールに
+      <strong>「スクリプト読み込みテスト：OK」</strong> と表示されれば成功です。
+    </p>
+    <div class="problem">
+      <h5>問題</h5>
+      <ul>
+        <li><code>console.log(...)</code> で他の文字列も表示してみる（例：自分の名前など）。</li>
+        <li><code>alert("Hello World!")</code> を書いてページを開いたときにアラートを表示させてみる。</li>
+      </ul>
+    </div>
+
+    <div class="step-title" id="step4">STEP 4. 要素を取得し、ボタンを押すとイベント発火</div>
+    <p>
+      次に、HTMLの各要素を JavaScript で取得し、ボタンを押すとメッセージが出る処理を実装しましょう。
+    </p>
+    <div class="code-block">
+      <button class="btn btn-sm btn-secondary copy-btn">Copy</button>
+      <pre><code>// script.js
+const todoInput = document.getElementById('todo-input'); // テキストボックス
+const addBtn = document.getElementById('add-btn');       // 登録ボタン
+const todoTable = document.getElementById('todo-table'); // テーブル
+const tbody = todoTable.querySelector('tbody');          // tbody部分
+
+addBtn.addEventListener('click', () => {
+  console.log("登録ボタンがクリックされました！");
+});
+</code></pre>
+    </div>
+    <p>ブラウザをリロードしてボタンを押すと、コンソールにメッセージが表示されるはずです。</p>
+    <div class="problem">
+      <h5>問題</h5>
+      <ul>
+        <li><code>querySelectorAll</code> を使って <code>&lt;label&gt;</code> 要素をすべて取得してみてください。</li>
+        <li>新しく <code>&lt;button&gt;</code> をもう1つ追加し、クリックすると別のメッセージを表示するように実装してみましょう。</li>
+      </ul>
+    </div>
+
+    <div class="step-title" id="step5">STEP 5. 入力値を取得してテーブルに追加</div>
+    <p>
+      入力された値をテーブルに行として追加する方法を学びます。<br>
+      まず、フォームを拡張し、期日や優先度の入力欄を用意しましょう。
+    </p>
+    <div class="code-block">
+      <button class="btn btn-sm btn-secondary copy-btn">Copy</button>
+      <pre><code>&lt;!-- index.html --&gt;
+&lt;div id="input-area"&gt;
+  &lt;label&gt;TODO:
+    &lt;input id="todo-input" type="text" placeholder="やることを入力" /&gt;
+  &lt;/label&gt;
+  &lt;label&gt;期日:
+    &lt;input id="date-input" type="date" /&gt;
+  &lt;/label&gt;
+  &lt;label&gt;優先度:
+    &lt;select id="priority"&gt;
+      &lt;option&gt;低&lt;/option&gt;
+      &lt;option selected&gt;普通&lt;/option&gt;
+      &lt;option&gt;高&lt;/option&gt;
+    &lt;/select&gt;
+  &lt;/label&gt;
+  &lt;button id="add-btn"&gt;登録&lt;/button&gt;
+&lt;/div&gt;
+</code></pre>
+    </div>
+    <p>JavaScript 側で要素を取得し、テーブルに行を追加するコードは以下のとおりです。</p>
+    <div class="code-block">
+      <button class="btn btn-sm btn-secondary copy-btn">Copy</button>
+      <pre><code>// script.js（一部省略）
+const dateInput = document.getElementById('date-input');
+const prioritySelect = document.getElementById('priority');
+
+addBtn.addEventListener('click', () => {
+  const todoValue = todoInput.value.trim();
+  const dateValue = dateInput.value;
+  const priorityValue = prioritySelect.value;
+
+  if (!todoValue) {
+    alert("TODOを入力してください。");
+    return;
+  }
+
+  const newRow = document.createElement('tr');
+
+  const tdTodo = document.createElement('td');
+  tdTodo.textContent = todoValue;
+
+  const tdDate = document.createElement('td');
+  tdDate.textContent = dateValue;
+
+  const tdPriority = document.createElement('td');
+  tdPriority.textContent = priorityValue;
+
+  const tdCheck = document.createElement('td');
+  const checkBox = document.createElement('input');
+  checkBox.type = 'checkbox';
+  tdCheck.appendChild(checkBox);
+
+  newRow.appendChild(tdTodo);
+  newRow.appendChild(tdDate);
+  newRow.appendChild(tdPriority);
+  newRow.appendChild(tdCheck);
+
+  tbody.appendChild(newRow);
+
+  // 入力欄リセット
+  todoInput.value = "";
+  dateInput.value = "";
+  prioritySelect.value = "普通";
+});
+</code></pre>
+    </div>
+    <p>ブラウザをリロードして何か入力・登録すると、新しい行がテーブルに追加されます。</p>
+    <div class="problem">
+      <h5>問題A: 列を追加</h5>
+      <ul>
+        <li>「担当者」の列を追加し、フォームとテーブル両方に反映してみてください。</li>
+      </ul>
+      <h5>問題B: 行の色を変える</h5>
+      <ul>
+        <li>優先度が「高」の場合、<code>newRow.style.backgroundColor</code> などで行の背景色を変えてみましょう。</li>
+      </ul>
+    </div>
+
+    <div class="step-title" id="step6">STEP 6. 入力チェックを改善</div>
+    <p>
+      すでに「TODOが空ならアラートを出す」処理を入れましたが、期日などのチェックも加えると便利です。
+    </p>
+    <div class="code-block">
+      <button class="btn btn-sm btn-secondary copy-btn">Copy</button>
+      <pre><code>if (!todoValue) {
+  alert("TODOを入力してください。");
+  return;
+}
+</code></pre>
+    </div>
+    <div class="problem">
+      <h5>問題</h5>
+      <ul>
+        <li>期日が未入力ならアラートを出すようにしてみてください。</li>
+        <li>期日が「今日より前の日付」だったらアラートを出すようにしてみましょう。<br>
+          ヒント: <code>new Date(dateValue)</code> と <code>new Date()</code> を比較。
+        </li>
+      </ul>
+    </div>
+
+    <div class="step-title" id="step7">STEP 7. データを配列で管理する（表示用関数を作成）</div>
+    <p>
+      今までは「追加ボタンを押す → テーブルを直接操作」でしたが、より柔軟な実装のために配列 <code>todos</code> を導入し、画面表示は関数 <code>renderTable()</code> で行う形にします。
+    </p>
+    <div class="code-block">
+      <button class="btn btn-sm btn-secondary copy-btn">Copy</button>
+      <pre><code>let todos = [];
+
+function renderTable() {
+  tbody.innerHTML = "";
+
+  todos.forEach((todoObj) => {
+    const newRow = document.createElement('tr');
+
+    const tdTodo = document.createElement('td');
+    tdTodo.textContent = todoObj.text;
+
+    const tdDate = document.createElement('td');
+    tdDate.textContent = todoObj.date;
+
+    const tdPriority = document.createElement('td');
+    tdPriority.textContent = todoObj.priority;
+
+    const tdCheck = document.createElement('td');
+    const checkBox = document.createElement('input');
+    checkBox.type = 'checkbox';
+    checkBox.checked = todoObj.completed;
+    checkBox.addEventListener('change', () => {
+      todoObj.completed = checkBox.checked;
+      renderTable(); // 再描画
+    });
+    tdCheck.appendChild(checkBox);
+
+    newRow.appendChild(tdTodo);
+    newRow.appendChild(tdDate);
+    newRow.appendChild(tdPriority);
+    newRow.appendChild(tdCheck);
+    tbody.appendChild(newRow);
+  });
+}
+
+// 登録ボタン
+addBtn.addEventListener('click', () => {
+  const todoValue = todoInput.value.trim();
+  const dateValue = dateInput.value;
+  const priorityValue = prioritySelect.value;
+
+  if (!todoValue) {
+    alert("TODOを入力してください。");
+    return;
+  }
+
+  todos.push({
+    text: todoValue,
+    date: dateValue,
+    priority: priorityValue,
+    completed: false
+  });
+
+  renderTable();
+
+  todoInput.value = "";
+  dateInput.value = "";
+  prioritySelect.value = "普通";
+});
+</code></pre>
+    </div>
+    <p>これで、追加ボタンを押すと配列にオブジェクトが入り、<code>renderTable()</code> でテーブルが再描画されます。</p>
+    <div class="problem">
+      <h5>問題</h5>
+      <ul>
+        <li>テーブルの上か下に「X件のTODOがあります」と表示してみましょう（<code>todos.length</code> を使用）。</li>
+        <li>追加ボタンを押すたびに、<code>console.log(todos)</code> などで配列の中身を出力してみましょう。</li>
+      </ul>
+    </div>
+
+    <div class="step-title" id="step8">STEP 8. localStorage を使ってデータを保存</div>
+    <p>
+      ブラウザを閉じてもTODOが残るように、<code>localStorage</code> を利用します。
+    </p>
+    <div class="code-block">
+      <button class="btn btn-sm btn-secondary copy-btn">Copy</button>
+      <pre><code>function saveTodos() {
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              // すべてのコピー用ボタンを取得
+              const copyButtons = document.querySelectorAll('.copy-btn');
+              
+              copyButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                  // 親要素 .code-block から <code> 要素を検索
+                  const codeElement = btn.closest('.code-block')?.querySelector('code');
+                  if (!codeElement) return;
+        
+                  // テキストを取得 (textContent or innerText)
+                  const codeText = codeElement.textContent;
+        
+                  // Clipboard APIでコピー（HTTPS または localhost 必須）
+                  navigator.clipboard.writeText(codeText)
+                    .then(() => {
+                      btn.textContent = 'Copied!';
+                      setTimeout(() => {
+                        btn.textContent = 'Copy';
+                      }, 1500);
+                    })
+                    .catch(err => {
+                      console.error('Copy failed:', err);
+                      alert("コピーに失敗しました。お使いのブラウザ設定を確認してください。");
+                    });
+                });
+              });
+            });
+          </script>
